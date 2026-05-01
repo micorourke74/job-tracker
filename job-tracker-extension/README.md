@@ -1,63 +1,54 @@
 # Job Tracker Clipper — Chrome Extension
 
-A companion Chrome extension for the [Job Tracker app](https://job-tracker-ten-self.vercel.app/). Open any job listing page, click the extension, and the job is saved directly into your tracker.
+A companion Chrome extension for the [Job Tracker app](https://job-tracker-ten-self.vercel.app/).
 
-Chrome Extension
+Open any job listing page, click the extension, and the job details are sent directly into your tracker — ready to review, edit, and save.
 
-The Chrome Web Store version is currently pending review. For now, advanced users can install the extension manually from this repository.
-
-Manual install:
-1. Download or clone this repository.
-2. Open chrome://extensions.
-3. Turn on Developer mode.
-4. Click Load unpacked.
-5. Select the job-tracker-extension folder.
-6. Pin Job Tracker Clipper and use it on supported job boards.
+![Job Tracker Clipper marquee promo](https://raw.githubusercontent.com/micorourke74/job-tracker/main/job-tracker-extension/Marquee%20Card.png)
 
 ---
 
-## What it does
+## How to install (developer load)
 
-1. You visit a job listing on any site (LinkedIn, Indeed, Workday, Greenhouse, Lever, ZipRecruiter, or any generic page).
-2. You click the **Job Tracker Clipper** extension icon.
-3. You click **Save this job**.
-4. The extension reads the current page and extracts:
-   - Job title
-   - Company name
-   - Location
-   - Pay range (if visible)
-   - Work type (Remote / Hybrid / On-site)
-   - Job description (first ~3000 characters)
-   - Job listing URL
-   - Source (inferred from the site)
-5. The extension opens your Job Tracker app with the extracted data encoded in the URL.
-6. The app detects the `importJob` URL parameter, creates a new job entry, shows a toast notification, and switches to the Applications tab.
-7. The URL is cleaned immediately — refreshing the page will **not** import the job again.
-
----
-
-## How to load it locally in Chrome
-
-1. Open **chrome://extensions** in Chrome.
-2. Enable **Developer Mode** (toggle in the top-right corner).
-3. Click **Load unpacked**.
-4. Select the `job-tracker-extension` folder from this project.
-5. The **Job Tracker Clipper** icon will appear in your toolbar (pin it for easy access).
+1. Download or clone this repository
+2. Open `chrome://extensions` in Chrome
+3. Enable **Developer mode** (toggle in the top-right corner)
+4. Click **Load unpacked**
+5. Select the `job-tracker-extension` folder
+6. Pin **Job Tracker Clipper** to your toolbar for easy access
 
 ---
 
 ## How to use it
 
-1. Navigate to any job listing page (e.g., a LinkedIn job post or a Workday job page).
-2. Click the **Job Tracker Clipper** icon in the Chrome toolbar.
-3. Click **Save this job**.
-4. The popup shows a preview card with the extracted title, company, location, work type, and pay range.
-5. A new tab opens with your Job Tracker app. The job appears at the top of the **Applications** tab with a "Job imported from extension ✓" toast.
-6. Open the job to review, edit, or add notes.
+1. Navigate to any job listing page
+2. Click the **Job Tracker Clipper** icon in the Chrome toolbar
+3. Click **Save this job**
+4. A new tab opens with the Job Tracker app — the job appears at the top of the Applications tab with a confirmation toast
+5. Open the job to review, fill in missing fields, and save
 
 ---
 
-## Supported job sites
+## What gets extracted
+
+When you click **Save this job**, the extension reads the active page and attempts to extract:
+
+| Field | Source |
+|---|---|
+| Job title | Site-specific selector or page heading |
+| Company name | Site-specific selector or schema.org metadata |
+| Location | Site-specific selector or metadata |
+| Pay range | Visible salary text, if present |
+| Work type | Inferred from page text (Remote / Hybrid / On-site) |
+| Job description | Visible description container, capped at ~3000 characters |
+| Listing URL | Current page URL |
+| Source | Inferred from hostname |
+
+The extension only reads the active tab when you click the button. It does not run in the background and does not monitor your browsing.
+
+---
+
+## Supported sites
 
 | Site | Support level |
 |---|---|
@@ -67,9 +58,10 @@ Manual install:
 | Lever | ✅ Site-specific selectors |
 | Workday | ✅ Site-specific selectors |
 | ZipRecruiter | ✅ Site-specific selectors |
-| All other sites | ✅ Generic extraction (schema.org, og tags, h1, visible text) |
+| Glassdoor | ✅ Site-specific selectors (selected job panel) |
+| All other sites | ✅ Generic extraction (schema.org, Open Graph tags, page heading, visible text) |
 
-> **Note:** Job board markup changes frequently. Site-specific extractors are a best-effort first pass. The extension always falls back to generic extraction if a specific selector returns nothing. Results may vary — always review the imported job and fill in any missing fields.
+> Job board markup changes frequently. Site-specific extractors are a best-effort first pass. The extension always falls back to generic extraction if a specific selector returns nothing. Results may vary — always review the imported job and fill in any missing fields.
 
 ---
 
@@ -86,19 +78,41 @@ When a field cannot be reliably extracted, these safe defaults are used:
 | Date applied | Today's date |
 | Work type | On-site (or inferred from page text) |
 | Source | Inferred from hostname |
-| Company | "Unknown Company" (if not found) |
-| Title | "Untitled Job Listing" (if not found) |
+| Company | "Unknown Company" |
+| Title | "Untitled Job Listing" |
 
 ---
 
-## Notes and limitations
+## How the import works
 
-- **Version 1** — generic extraction with basic site-specific rules. It works well on most pages but is not perfect on every layout.
-- The extension only reads the active page when you click **Save this job** — it does not run in the background.
-- The extension does not write to localStorage directly. It passes data via a URL parameter, and the React app handles saving.
-- The job description is capped at ~3000 characters to keep the URL a reasonable length.
-- If the URL is unusually long after encoding, the description is trimmed further automatically.
-- Chrome Web Store publishing is optional and not included here. This is a local developer load only.
+The extension does not write to the app's localStorage directly. Instead it:
+
+1. Extracts available job details from the active page
+2. Encodes the data as a Unicode-safe base64 JSON payload
+3. Opens the Job Tracker app with `?importJob=<payload>` in the URL
+4. The app decodes the payload, creates a new job entry, and switches to the Applications tab
+5. The URL is cleaned immediately with `window.history.replaceState` — refreshing will never duplicate the import
+6. A `useRef` guard in the app prevents any double-import on re-render
+
+Field trimming is applied before encoding to keep the URL a safe length:
+
+| Field | Max length |
+|---|---|
+| Company | 120 characters |
+| Title | 120 characters |
+| Location | 120 characters |
+| Pay range | 80 characters |
+| Job listing URL | 500 characters |
+| Summary | 500 characters |
+| Job description | 3000 characters |
+
+---
+
+## Privacy
+
+The extension does not collect, sell, or share user data. It reads visible page content only when you click **Save this job**. Extracted data is used solely to open the Job Tracker app with the job information ready for review. All saved job data lives in the user's own browser localStorage.
+
+See [privacy.md](privacy.md) for the full privacy policy text.
 
 ---
 
@@ -108,8 +122,9 @@ When a field cannot be reliably extracted, these safe defaults are used:
 job-tracker-extension/
 ├── manifest.json       # Manifest V3 config
 ├── popup.html          # Extension popup UI
-├── popup.js            # Popup logic (extraction trigger, encoding, tab open)
-├── content.js          # Page extraction script (injected into active tab)
+├── popup.js            # Popup logic: extraction trigger, encoding, tab open
+├── content.js          # Page extraction script injected into the active tab
+├── privacy.md          # Privacy policy
 ├── icons/
 │   ├── icon16.png
 │   ├── icon48.png
@@ -119,17 +134,9 @@ job-tracker-extension/
 
 ---
 
-## App change (App.jsx)
+## Notes and limitations
 
-A single `useEffect` was added to `App.jsx`. It:
-- Runs once on mount
-- Checks `URLSearchParams` for `importJob`
-- Decodes the Unicode-safe base64 payload
-- Creates a hydrated job using the app's existing `hydrateJob()` function
-- Prepends it to the jobs list via `setJobs`
-- Switches to the Applications tab
-- Shows a toast: `"Job imported from extension ✓"`
-- Cleans the URL with `window.history.replaceState` so refresh never duplicates
-- Uses a `useRef` guard (`importedFromUrlRef`) to prevent any double-run
-
-No existing features were removed or changed.
+- The extension reads the active tab only after you click **Save this job** — there is no background activity
+- Glassdoor search pages show selected job header details but may not expose the full description reliably. If the description cannot be found safely, the extension uses a fallback note and links to the listing URL instead
+- The job description is capped to keep the URL a reasonable length. Very long descriptions are trimmed automatically
+- Always review the imported job in the tracker and fill in any fields the extension could not detect
