@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Job Tracker Clipper",
+  "version": "1.0.0",
+  "description": "Save job listings from any site directly into your Job Tracker app.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Job Tracker Clipper"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
