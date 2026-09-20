@@ -123,6 +123,28 @@ AGPL is strong copyleft. Do not copy its implementation into this repository wit
 Decision:
 Use as a behavior/design reference only unless licensing is revisited.
 
+## 7. speedyapply/JobSpy
+
+Repository: https://github.com/speedyapply/JobSpy  
+License: MIT  
+Role: optional discovery fallback
+
+Useful patterns:
+- normalized retrieval across multiple public job boards
+- structured job records
+- location/remote filtering
+- salary extraction
+
+Current cautions:
+- scraping reliability varies by provider
+- recent issues report Indeed hangs and incomplete LinkedIn data
+- direct employer URLs may be missing for some results
+- no repository security policy was detected during the September 2026 audit
+- job-board scraping can trigger blocking or conflict with platform terms
+
+Decision:
+Do not make JobSpy the system of record. If used, restrict it to discovery hints, pin a tested commit, apply strict timeouts/rate limits, and verify every promising result against the employer's official career page before application.
+
 ## What we intentionally reject
 
 Do not import or emulate projects whose primary behavior is:
@@ -134,5 +156,7 @@ Do not import or emulate projects whose primary behavior is:
 - fake identity/account generation
 - fabricated resume augmentation
 - indiscriminate high-volume submissions
+
+High-volume auto-applier repositories can still be studied for UI/adapter ideas, but their submission strategy is not an acceptable architecture for this project.
 
 The objective is a durable, truthful job-acquisition system, not application-count vanity metrics.
