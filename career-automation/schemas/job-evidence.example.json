@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "job_id": "canonical-id",
+  "source": {
+    "url": "https://example.com/job",
+    "retrieved_at": "ISO-8601",
+    "source_type": "employer|ats|board"
+  },
+  "employer": "",
+  "title": "",
+  "requisition_id": null,
+  "location": "",
+  "work_arrangement": "remote|hybrid|onsite|unknown",
+  "salary": null,
+  "posted_at": null,
+  "description": "",
+  "mandatory_requirements": [],
+  "preferred_requirements": [],
+  "responsibilities": [],
+  "keywords": [],
+  "requirement_map": [
+    {
+      "requirement": "",
+      "status": "VERIFIED_MATCH|PARTIAL_MATCH|GAP|UNKNOWN",
+      "evidence_ids": []
+    }
+  ],
+  "fit_score": {
+    "total": 0,
+    "mandatory": 0,
+    "skill_overlap": 0,
+    "level_fit": 0,
+    "geography": 0,
+    "opportunity_quality": 0,
+    "recency": 0,
+    "strategic_value": 0
+  }
+}

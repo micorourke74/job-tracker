@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "candidate_id": "candidate",
+  "contact": {
+    "first_name": "<private>",
+    "last_name": "<private>",
+    "email": "<private>",
+    "phone": "<private>",
+    "city": "<private>",
+    "state": "<private>",
+    "country": "<private>",
+    "linkedin": "<private>",
+    "github": "<private>",
+    "portfolio": "<optional-private>"
+  },
+  "employment": [
+    {
+      "id": "employment_001",
+      "employer": "<verified>",
+      "title": "<verified>",
+      "start_date": "YYYY-MM",
+      "end_date": null,
+      "location": "<verified>",
+      "verified_skills": [
+        "<skill-id>"
+      ],
+      "bullets": [
+        {
+          "id": "employment_001_bullet_001",
+          "text": "<verified factual statement>",
+          "metrics": [],
+          "evidence_note": "<why this statement is supported>"
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "education_001",
+      "institution": "<verified>",
+      "degree": "<verified>",
+      "field": "<verified>",
+      "conferral_date": "YYYY-MM",
+      "gpa": null,
+      "honors": []
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert_001",
+      "name": "<verified>",
+      "issuer": "<verified>",
+      "issued": "YYYY-MM",
+      "expires": "YYYY-MM"
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill_001",
+      "name": "<verified>",
+      "level": "exposure|working|strong",
+      "evidence_ids": [
+        "<employment/project/lab evidence id>"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "project_001",
+      "name": "<verified>",
+      "description": "<verified>",
+      "skills": [
+        "<skill-id>"
+      ],
+      "url": "<optional>"
+    }
+  ],
+  "preferences": {
+    "remote": null,
+    "relocate": null,
+    "commute_region": null,
+    "salary_strategy": null
+  },
+  "legal_answers": {
+    "work_authorized_us": null,
+    "sponsorship_now": null,
+    "sponsorship_future": null,
+    "over_18": null
+  },
+  "sensitive_answers": {
+    "policy": "never infer; explicit user-approved values only"
+  }
+}

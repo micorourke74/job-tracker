@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "candidate": "Michael O'Rourke",
+  "geography": {
+    "primary": [
+      "Remote - US",
+      "Orlando, FL"
+    ],
+    "hybrid_radius": "Orlando metro / practical commute",
+    "relocation": "only when explicitly viable"
+  },
+  "role_families": [
+    "IT Support",
+    "Help Desk / Service Desk",
+    "Technical / Product Support",
+    "Desktop Support",
+    "Application Support",
+    "Junior IT Analyst",
+    "QA / Software Testing",
+    "AI Support / AI Operations",
+    "Junior Automation"
+  ],
+  "priority_employers": [
+    "The Walt Disney Company / Walt Disney World"
+  ],
+  "hard_rejects": [
+    "senior/staff/principal/lead/director unless duties clearly junior despite title",
+    "mandatory active clearance not held",
+    "mandatory 5+ years specialized engineering experience",
+    "commission-only",
+    "unpaid",
+    "MLM/scam",
+    "incompatible residency requirement"
+  ],
+  "thresholds": {
+    "priority": 80,
+    "apply": 65,
+    "review": 50,
+    "disney_priority": 70
+  },
+  "data_policy": {
+    "store_pii_in_repo": false,
+    "store_passwords": false,
+    "store_legal_answers": false,
+    "store_resume_binary": false
+  }
+}
